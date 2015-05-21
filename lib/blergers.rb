@@ -9,11 +9,32 @@ module Blergers
   class Post < ActiveRecord::Base
     has_many :post_tags
     has_many :tags, through: :post_tags
+
+    # need to sort by date_time stamp -- oldest to newest -- 10 posts.
+    def self.page(n)
+      # Post.page(1)  <-- should return the last 10 posts written.
+      # Post.page(2)  <-- should return the next 10 posts after above.
+      Post.order(date: :desc).limit(10)
+    end
+
+    def self.page(1)
+      Post.order(date: :desc).limit(10)
+    end
+
+    def self.page(2)
+      Post.order(date: :desc).limit(10).offset(10)
+    end
+
   end
 
   class Tag < ActiveRecord::Base
     has_many :post_tags
     has_many :posts, through: :post_tags
+
+    # Return tags rankings -- most popular | lease popular.
+    # Display like last nights score_board.
+    def self.top_tags
+    end
   end
 
   class PostTag < ActiveRecord::Base
